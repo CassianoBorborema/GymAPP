@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import { Aluno } from "../../domain/entities/Aluno";
 import { AlunoRepository } from "../../domain/repositories/AlunoRepository";
 import { CadastrarAlunoInput } from "../dto/AlunoDTO";
