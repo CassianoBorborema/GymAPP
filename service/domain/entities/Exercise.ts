@@ -5,7 +5,8 @@ export class Exercise {
     readonly id: string, //id persistente
     public name: string,
     public muscleGroup: MuscleGroup,
-    public videoUrl: string,
+    public videoUrl?: string,
+    public description?: string,
   ) {
     this.validate();
   }
