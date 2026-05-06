@@ -1,4 +1,4 @@
-import { Aluno } from "../entities/Aluno";
+import { Aluno } from "../entities/Aluno.js";
 
 export interface AlunoRepository {
   save(aluno: Aluno): Promise<void>;

@@ -1,0 +1,25 @@
+{
+  "name": "gymapp",
+  "version": "1.0.0",
+  "description": "Training generation application",
+  "homepage": "https://github.com/CassianoBorborema/GymAPP#readme",
+  "bugs": {
+    "url": "https://github.com/CassianoBorborema/GymAPP/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CassianoBorborema/GymAPP.git"
+  },
+  "license": "ISC",
+  "author": "Cassiano Borborema",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "run"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}

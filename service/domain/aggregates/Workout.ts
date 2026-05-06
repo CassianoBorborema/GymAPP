@@ -1,4 +1,4 @@
-import { Exercise } from "../entities/Exercise";
+import { Exercise } from "../entities/Exercise.js";
 
 export class Workout {
   private exercise: Exercise[] = [];

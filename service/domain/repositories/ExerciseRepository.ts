@@ -1,5 +1,5 @@
-import { Exercise } from "../entities/Exercise";
-import { MuscleGroup } from "../entities/Exercise";
+import { Exercise } from "../entities/Exercise.js";
+import type { MuscleGroup } from "../entities/Exercise.js";
 
 export interface ExerciseRepository {
   save(exercise: Exercise): Promise<void>;

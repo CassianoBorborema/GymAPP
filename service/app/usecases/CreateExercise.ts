@@ -1,7 +1,7 @@
-import crypto from "node:crypto"; // Importante para o ID
-import { Exercise } from "../../domain/entities/Exercise";
-import { ExerciseRepository } from "../../domain/repositories/ExerciseRepository";
-import { CriarExercicioInput } from "../dto/ExerciseDTO";
+import crypto from "node:crypto";
+import { Exercise } from "../../domain/entities/Exercise.js";
+import type { ExerciseRepository } from "../../domain/repositories/ExerciseRepository.js";
+import type { CriarExercicioInput } from "../dto/ExerciseDTO.js";
 
 export class CriarExercicio {
   constructor(private exerciseRepository: ExerciseRepository) {}
@@ -19,7 +19,7 @@ export class CriarExercicio {
       crypto.randomUUID(),
       input.name,
       input.muscleGroup,
-      input.videoUrl,
+      input.videoURL,
       input.description,
     );
 

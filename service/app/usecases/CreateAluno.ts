@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
-import { Aluno } from "../../domain/entities/Aluno";
-import { AlunoRepository } from "../../domain/repositories/AlunoRepository";
-import { CadastrarAlunoInput } from "../dto/AlunoDTO";
+import { Aluno } from "../../domain/entities/Aluno.js";
+import type { AlunoRepository } from "../../domain/repositories/AlunoRepository.js";
+import type { CadastrarAlunoInput } from "../dto/AlunoDTO.js";
 
 export class CadastrarAluno {
   constructor(private alunoRepository: AlunoRepository) {}
