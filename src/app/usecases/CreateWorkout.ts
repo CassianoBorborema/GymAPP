@@ -1,0 +1,35 @@
+import crypto from "node:crypto";
+import { Workout } from "../../domain/aggregates/Workout.js";
+import { WorkoutItem } from "../../domain/entities/WorkoutItem.js";
+import type { WorkoutRepository } from "../../domain/repositories/WorkoutRepository.js";
+import type { WorkoutInput } from "../dto/WorkoutDTO.js";
+
+export class CriarTreino {
+  constructor(private workoutRepository: WorkoutRepository) {}
+
+  async execute(input: WorkoutInput): Promise<Workout> {
+    const items = input.items.map(
+      (item) =>
+        new WorkoutItem(
+          crypto.randomUUID(),
+          item.exerciseId,
+          item.sets,
+          item.reps,
+          item.restTime,
+          item.observations,
+        ),
+    );
+
+    const novoTreino = new Workout(
+      crypto.randomUUID(),
+      input.alunoId,
+      input.instructorId,
+      input.title,
+      items,
+    );
+
+    await this.workoutRepository.save(novoTreino);
+
+    return novoTreino;
+  }
+}
