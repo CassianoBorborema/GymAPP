@@ -14,7 +14,7 @@ export class InMemoryWorkoutRepository implements WorkoutRepository {
   }
 
   async findByAlunoId(alunoId: string): Promise<Workout[]> {
-    return this.workouts.filter((w) => w.alunoid === alunoId);
+    return this.workouts.filter((w) => w.alunoId === alunoId);
   }
 
   async delete(id: string): Promise<void> {
