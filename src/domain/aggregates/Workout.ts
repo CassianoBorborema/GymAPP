@@ -1,4 +1,4 @@
-import { WorkoutItem } from "../entities/WorkoutItem.js";
+import { WorkoutItem } from "./WorkoutItem.js";
 
 export class Workout {
   private items: WorkoutItem[]=[];
@@ -25,5 +25,19 @@ export class Workout {
       throw new Error("O treino deve ter pelo menos um exercício.");
     }
 
+  }
+
+  addItem(item: WorkoutItem): void {
+    this.items.push(item);
+    this.validate();
+  }
+
+  removeItem(itemId: string): void {
+    this.items = this.items.filter(item => item.id !== itemId);
+    this.validate();
+  }
+
+  getItems(): readonly WorkoutItem[] {
+    return this.items;
   }
 }

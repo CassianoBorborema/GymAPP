@@ -7,7 +7,7 @@ export class WorkoutItem{
         public restTime: number,
         public observations?: string 
     ) {
-        this.validate
+        this.validate();
     }
 
     private validate(){

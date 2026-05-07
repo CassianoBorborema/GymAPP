@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { Workout } from "../../domain/aggregates/Workout.js";
-import { WorkoutItem } from "../../domain/entities/WorkoutItem.js";
+import { WorkoutItem } from "../../domain/aggregates/WorkoutItem.js";
 import type { WorkoutRepository } from "../../domain/repositories/WorkoutRepository.js";
 import type { CreateWorkoutInput } from "../dto/WorkoutDTO.js";
 
