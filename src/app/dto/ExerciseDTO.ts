@@ -5,4 +5,14 @@ export interface CriarExercicioInput {
   muscleGroup: MuscleGroup;
   videoURL?: string;
   description?: string;
+  instructorId: string;
+}
+
+export interface SearchExerciseInput {
+  name?: string;
+  muscleGroup?: MuscleGroup;
+}
+
+export interface ExerciseIdInput {
+  id: string;
 }

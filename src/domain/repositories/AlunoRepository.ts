@@ -10,4 +10,6 @@ export interface AlunoRepository {
   findById(id: string): Promise<Aluno | null>;
 
   findByCPF(CPF: string): Promise<Aluno | null>;
+
+  delete(id: string): Promise<void>; 
 }

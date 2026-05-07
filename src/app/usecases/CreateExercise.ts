@@ -7,6 +7,10 @@ export class CriarExercicio {
   constructor(private exerciseRepository: ExerciseRepository) {}
 
   async execute(input: CriarExercicioInput): Promise<Exercise> {
+    if (!input.instructorId) {
+      throw new Error("Apenas instrutores podem criar exercícios");
+    }
+
     const exerciseExistente = await this.exerciseRepository.findByName(
       input.name,
     );

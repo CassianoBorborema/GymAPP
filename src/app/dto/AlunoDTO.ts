@@ -5,3 +5,20 @@ export interface CadastrarAlunoInput {
   password: string;
   CPF: string;
 }
+
+export interface BuscarAlunoInput {
+  CPF?: string;
+  email?: string;
+}
+
+export interface AlunoIdInput {
+  id: string;
+}
+
+export interface AlunoOutput {
+  id: string;
+  name: string;
+  email: string;
+  weight: number;
+  CPF: string;
+}

@@ -2,14 +2,18 @@ import crypto from "node:crypto";
 import { Workout } from "../../domain/aggregates/Workout.js";
 import { WorkoutItem } from "../../domain/entities/WorkoutItem.js";
 import type { WorkoutRepository } from "../../domain/repositories/WorkoutRepository.js";
-import type { WorkoutInput } from "../dto/WorkoutDTO.js";
+import type { CreateWorkoutInput } from "../dto/WorkoutDTO.js";
 
 export class CriarTreino {
   constructor(private workoutRepository: WorkoutRepository) {}
 
-  async execute(input: WorkoutInput): Promise<Workout> {
+  async execute(input: CreateWorkoutInput): Promise<Workout> {
+    if (!input.instructorId) {
+      throw new Error("Apenas instrutores podem criar treinos");
+    }
+
     const items = input.items.map(
-      (item) =>
+      (item: typeof input.items[0]) =>
         new WorkoutItem(
           crypto.randomUUID(),
           item.exerciseId,
