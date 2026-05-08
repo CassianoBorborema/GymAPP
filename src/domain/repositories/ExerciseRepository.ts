@@ -5,6 +5,8 @@ export interface ExerciseRepository {
   
   save(exercise: Exercise): Promise<void>;
 
+  update(exercise: Exercise): Promise<void>;
+  
   findByName(name: string): Promise<Exercise[]>;
 
   findByMuscleGroup(muscleGroup: MuscleGroup): Promise<Exercise[]>;

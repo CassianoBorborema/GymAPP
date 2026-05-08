@@ -3,7 +3,7 @@ import { Aluno } from "../../domain/entities/Aluno.js";
 import type { AlunoRepository } from "../../domain/repositories/AlunoRepository.js";
 import type { CadastrarAlunoInput } from "../dto/AlunoDTO.js";
 
-export class CadastrarAluno {
+export class CreateAluno {
   constructor(private alunoRepository: AlunoRepository) {}
 
   async execute(input: CadastrarAlunoInput): Promise<void> {

@@ -9,6 +9,15 @@ export class InMemoryAlunoRepository implements AlunoRepository {
     console.log(`[InMemory DB] Aluno ${aluno.name} salvo com sucesso`);
   }
 
+  async update(aluno: Aluno): Promise<void> {
+    const index = this.alunos.findIndex((a) => a.id === aluno.id);
+    if (index === -1) {
+      throw new Error("Aluno não encontrado para atualização.");
+    }
+    this.alunos[index] = aluno;
+    console.log(`[InMemory DB] Aluno ${aluno.id} atualizado com sucesso`);
+  }
+
   async findByName(name: string): Promise<Aluno[]> {
     return this.alunos.filter((a) =>
       a.name.toLowerCase().includes(name.toLowerCase()),

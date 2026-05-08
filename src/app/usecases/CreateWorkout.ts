@@ -4,7 +4,7 @@ import { WorkoutItem } from "../../domain/aggregates/WorkoutItem.js";
 import type { WorkoutRepository } from "../../domain/repositories/WorkoutRepository.js";
 import type { CreateWorkoutInput } from "../dto/WorkoutDTO.js";
 
-export class CriarTreino {
+export class CreateWorkout {
   constructor(private workoutRepository: WorkoutRepository) {}
 
   async execute(input: CreateWorkoutInput): Promise<Workout> {

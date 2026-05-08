@@ -9,6 +9,15 @@ export class InMemoryInstructorRepository implements InstructorRepository {
     console.log(`[InMemory DB] Instrutor ${instructor.name} salvo com sucesso`);
   }
 
+  async update(instructor: Instructor): Promise<void> {
+    const index = this.instructors.findIndex((i) => i.id === instructor.id);
+    if (index === -1) {
+      throw new Error("Instrutor não encontrado para atualização.");
+    }
+    this.instructors[index] = instructor;
+    console.log(`[InMemory DB] Instrutor ${instructor.id} atualizado com sucesso`);
+  }
+
   async findById(id: string): Promise<Instructor | null> {
     return this.instructors.find((i) => i.id === id) || null;
   }

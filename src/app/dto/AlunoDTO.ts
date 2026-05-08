@@ -15,6 +15,14 @@ export interface AlunoIdInput {
   id: string;
 }
 
+export interface UpdateAlunoInput {
+  id: string;
+  name?: string;
+  email?: string;
+  weight?: number;
+  password?: string;
+}
+
 export interface AlunoOutput {
   id: string;
   name: string;
@@ -22,3 +30,4 @@ export interface AlunoOutput {
   weight: number;
   CPF: string;
 }
+

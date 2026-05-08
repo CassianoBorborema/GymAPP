@@ -10,6 +10,15 @@ export class InMemoryExerciseRepository implements ExerciseRepository {
     console.log(`[InMemory DB] Exercício ${exercise.name} salvo com sucesso`);
   }
 
+  async update(exercise: Exercise): Promise<void> {
+    const index = this.exercises.findIndex((e) => e.id === exercise.id);
+    if (index === -1) {
+      throw new Error("Exercício não encontrado para atualização.");
+    }
+    this.exercises[index] = exercise;
+    console.log(`[InMemory DB] Exercício ${exercise.id} atualizado com sucesso`);
+  }
+
   async findByName(name: string): Promise<Exercise[]> {
     return this.exercises.filter((e) =>
       e.name.toLowerCase().includes(name.toLowerCase()),

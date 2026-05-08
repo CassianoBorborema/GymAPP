@@ -3,7 +3,7 @@ import { Exercise } from "../../domain/entities/Exercise.js";
 import type { ExerciseRepository } from "../../domain/repositories/ExerciseRepository.js";
 import type { CriarExercicioInput } from "../dto/ExerciseDTO.js";
 
-export class CriarExercicio {
+export class CreateExercise {
   constructor(private exerciseRepository: ExerciseRepository) {}
 
   async execute(input: CriarExercicioInput): Promise<Exercise> {

@@ -2,7 +2,7 @@ export type MuscleGroup = "Peito" | "Costas" | "Pernas" | "Ombros" | "Braços";
 
 export class Exercise {
   constructor(
-    readonly id: string, //id persistente
+    readonly id: string, 
     public name: string,
     public muscleGroup: MuscleGroup,
     public videoUrl?: string,

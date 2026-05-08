@@ -3,6 +3,8 @@ export interface WorkoutRepository{
 
     save(workout: Workout): Promise<void>;
 
+    update(workout: Workout):Promise<void>;
+    
     findById(id:string): Promise<Workout | null>;
 
     findByAlunoId(alunoId: string):Promise<Workout[]>

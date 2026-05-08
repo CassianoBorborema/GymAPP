@@ -9,6 +9,15 @@ export class InMemoryWorkoutRepository implements WorkoutRepository {
     console.log(`[InMemory DB] Treino ${workout.title} salvo com sucesso`);
   }
 
+  async update(workout: Workout): Promise<void> {
+    const index = this.workouts.findIndex((w) => w.id === workout.id);
+    if (index === -1) {
+      throw new Error("Treino não encontrado para atualização.");
+    }
+    this.workouts[index] = workout;
+    console.log(`[InMemory DB] Treino ${workout.id} atualizado com sucesso`);
+  }
+
   async findById(id: string): Promise<Workout | null> {
     return this.workouts.find((w) => w.id === id) || null;
   }

@@ -3,6 +3,8 @@ import { Aluno } from "../entities/Aluno.js";
 export interface AlunoRepository {
   save(aluno: Aluno): Promise<void>;
 
+  update(aluno: Aluno): Promise<void>;
+  
   findByName(name: string): Promise<Aluno[]>;
 
   findByEmail(email: string): Promise<Aluno | null>;
@@ -12,4 +14,5 @@ export interface AlunoRepository {
   findByCPF(CPF: string): Promise<Aluno | null>;
 
   delete(id: string): Promise<void>; 
+
 }

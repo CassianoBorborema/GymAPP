@@ -32,6 +32,16 @@ export class Workout {
     this.validate();
   }
 
+  replaceItems(items: WorkoutItem[]): void {
+    this.items = items;
+    this.validate();
+  }
+
+  setTitle(title: string): void {
+    this.title = title;
+    this.validate();
+  }
+
   removeItem(itemId: string): void {
     this.items = this.items.filter(item => item.id !== itemId);
     this.validate();

@@ -11,6 +11,11 @@ export class Instructor {
     this.validate();
   }
 
+  setPassword(password: string): void {
+    this.password = password;
+    this.validate();
+  }
+
   private validate() {
     if (!this.name || this.name.length < 2) {
       throw new Error("Nome do instrutor inválido");

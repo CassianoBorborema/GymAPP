@@ -16,3 +16,12 @@ export interface SearchExerciseInput {
 export interface ExerciseIdInput {
   id: string;
 }
+
+export interface UpdateExerciseInput{
+  id: string;
+  name?: string;
+  muscleGroup?: MuscleGroup;
+  videoURL?: string;
+  description?:string;
+  instructorId?: string;
+}
