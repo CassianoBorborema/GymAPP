@@ -1,5 +1,5 @@
-import { Aluno } from "../../domain/entities/Aluno.js";
-import type { AlunoRepository } from "../../domain/repositories/AlunoRepository.js";
+import { Aluno } from "../../../domain/entities/Aluno.js";
+import type { AlunoRepository } from "../../../domain/repositories/AlunoRepository.js";
 
 export class InMemoryAlunoRepository implements AlunoRepository {
   private alunos: Aluno[] = [];

@@ -1,5 +1,5 @@
-import { Workout } from "../../domain/aggregates/Workout.js";
-import type { WorkoutRepository } from "../../domain/repositories/WorkoutRepository.js";
+import { Workout } from "../../../domain/aggregates/Workout.js";
+import type { WorkoutRepository } from "../../../domain/repositories/WorkoutRepository.js";
 
 export class InMemoryWorkoutRepository implements WorkoutRepository {
   private workouts: Workout[] = [];

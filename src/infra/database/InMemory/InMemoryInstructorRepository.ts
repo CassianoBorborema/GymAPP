@@ -1,5 +1,5 @@
-import { Instructor } from "../../domain/entities/Instructor.js";
-import type { InstructorRepository } from "../../domain/repositories/InstructorRepository.js";
+import { Instructor } from "../../../domain/entities/Instructor.js";
+import type { InstructorRepository } from "../../../domain/repositories/InstructorRepository.js";
 
 export class InMemoryInstructorRepository implements InstructorRepository {
   private instructors: Instructor[] = [];

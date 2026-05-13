@@ -1,6 +1,6 @@
-import { Exercise } from "../../domain/entities/Exercise.js";
-import type { ExerciseRepository } from "../../domain/repositories/ExerciseRepository.js";
-import type { MuscleGroup } from "../../domain/entities/Exercise.js";
+import { Exercise } from "../../../domain/entities/Exercise.js";
+import type { ExerciseRepository } from "../../../domain/repositories/ExerciseRepository.js";
+import type { MuscleGroup } from "../../../domain/entities/Exercise.js";
 
 export class InMemoryExerciseRepository implements ExerciseRepository {
   private exercises: Exercise[] = [];
