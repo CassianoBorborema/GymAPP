@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+// Importe seus Use Cases e o Repositório aqui
 import { CreateAluno } from "../../app/usecases/CreateAluno.js";
 import { GetAluno } from "../../app/usecases/GetAluno.js";
 import { UpdateAluno } from "../../app/usecases/UpdateAluno.js";
@@ -6,12 +7,14 @@ import { SearchAluno } from "../../app/usecases/SearchAluno.js";
 import { InMemoryAlunoRepository } from "../database/InMemory/InMemoryAlunoRepository.js";
 
 export async function alunoRoutes(app: FastifyInstance) {
+  // Instanciamos o que o Aluno precisa aqui dentro
   const alunoRepository = new InMemoryAlunoRepository();
   const createAluno = new CreateAluno(alunoRepository);
   const getAluno = new GetAluno(alunoRepository);
   const updateAluno = new UpdateAluno(alunoRepository);
   const searchAluno = new SearchAluno(alunoRepository);
 
+  // --- Rota POST ---
   app.post("/alunos", async (request, reply) => {
     try {
       const body = request.body as any;
@@ -22,6 +25,7 @@ export async function alunoRoutes(app: FastifyInstance) {
     }
   });
 
+  // --- Rota GET (ID) ---
   app.get("/alunos/:id", async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -32,6 +36,7 @@ export async function alunoRoutes(app: FastifyInstance) {
     }
   });
 
+  // --- Rota PATCH ---
   app.patch("/alunos/:id", async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -43,6 +48,7 @@ export async function alunoRoutes(app: FastifyInstance) {
     }
   });
 
+  // --- Rota GET (Busca) ---
   app.get("/alunos", async (request, reply) => {
     try {
       const query = request.query as { cpf?: string; email?: string };

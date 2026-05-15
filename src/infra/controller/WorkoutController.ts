@@ -1,14 +1,17 @@
 import type { FastifyInstance } from "fastify";
 import { CreateWorkout } from "../../app/usecases/CreateWorkout.js";
+import { DeleteWorkout } from "../../app/usecases/DeleteWorkout.js";
 import { GetWorkout } from "../../app/usecases/GetWorkout.js";
 import { ListWorkout } from "../../app/usecases/ListWorkout.js";
-import { UpdateWorkout } from "../../app/usecases/UpdateWorkout.js";
-import { DeleteWorkout } from "../../app/usecases/DeleteWorkout.js";
 import { SearchWorkoutByTitle } from "../../app/usecases/SearchWorkoutByTitle.js";
-import { InMemoryWorkoutRepository } from "../database/InMemory/InMemoryWorkoutRepository.js";
+import { UpdateWorkout } from "../../app/usecases/UpdateWorkout.js";
+import type { WorkoutRepository } from "../../domain/repositories/WorkoutRepository.js";
 
-export async function workoutRoutes(app: FastifyInstance) {
-  const workoutRepository = new InMemoryWorkoutRepository();
+export async function workoutRoutes(
+  app: FastifyInstance,
+  opts: { workoutRepository: WorkoutRepository },
+) {
+  const { workoutRepository } = opts;
   const createWorkout = new CreateWorkout(workoutRepository);
   const getWorkout = new GetWorkout(workoutRepository);
   const listWorkout = new ListWorkout(workoutRepository);
