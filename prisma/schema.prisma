@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Aluno {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  cpf       String    @unique
+  weight    Float    
+  password  String   
+  createdAt DateTime  @default(now())
+  workouts  Workout[]
+}
+
+model Instructor {
+  id        String    @id @default(uuid())
+  name      String  
+  email     String    @unique
+  createdAt DateTime  @default(now())
+  workouts  Workout[]
+}
+
+model Exercise {
+  id          String        @id @default(uuid())
+  name        String
+  description String?
+  items       WorkoutItem[]
+}
+
+model Workout {
+  id           String        @id @default(uuid())
+  title        String
+  alunoId      String
+  instructorId String
+  createdAt    DateTime      @default(now())
+
+  aluno        Aluno         @relation(fields: [alunoId], references: [id])
+  instructor   Instructor    @relation(fields: [instructorId], references: [id])
+  items        WorkoutItem[]
+}
+
+model WorkoutItem {
+  id         String   @id @default(uuid())
+  workoutId  String
+  exerciseId String
+  sets       Int
+  reps       Int
+
+  workout    Workout  @relation(fields: [workoutId], references: [id])
+  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+}
