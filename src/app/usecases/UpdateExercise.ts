@@ -1,4 +1,3 @@
-import crypto from "node:crypto";
 import type { ExerciseRepository } from "../../domain/repositories/ExerciseRepository.js";
 import type { UpdateExerciseInput } from "../dto/ExerciseDTO.js";
 import { Exercise } from "../../domain/entities/Exercise.js";
@@ -24,8 +23,8 @@ export class UpdateExercise {
       exercise.muscleGroup = input.muscleGroup;
     }
 
-    if (input.videoURL !== undefined) {
-      exercise.videoUrl = input.videoURL;
+    if (input.videoUrl !== undefined) {
+      exercise.videoUrl = input.videoUrl;
     }
 
     if (input.description !== undefined) {

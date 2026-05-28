@@ -3,7 +3,7 @@ import type { MuscleGroup } from "../../domain/entities/Exercise.js";
 export interface CriarExercicioInput {
   name: string;
   muscleGroup: MuscleGroup;
-  videoURL?: string;
+  videoUrl?: string;
   description?: string;
   instructorId: string;
 }
@@ -21,7 +21,11 @@ export interface UpdateExerciseInput{
   id: string;
   name?: string;
   muscleGroup?: MuscleGroup;
-  videoURL?: string;
-  description?:string;
+  videoUrl?: string;
+  description?: string;
   instructorId?: string;
+}
+
+export interface DeleteExerciseInput {
+  id: string;
 }

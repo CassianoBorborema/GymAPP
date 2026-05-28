@@ -15,15 +15,15 @@ export class CreateExercise {
       input.name,
     );
 
-    if (exerciseExistente) {
-      throw new Error("Exercício já existe");
+    if (exerciseExistente.length > 0) {
+      throw new Error("Exercício com este nome já existe");
     }
 
     const novoExercicio = new Exercise(
       crypto.randomUUID(),
       input.name,
       input.muscleGroup,
-      input.videoURL,
+      input.videoUrl,
       input.description,
     );
 

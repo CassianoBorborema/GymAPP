@@ -1,6 +1,6 @@
 import { Aluno } from "../../../domain/entities/Aluno.js";
 import type { AlunoRepository } from "../../../domain/repositories/AlunoRepository.js";
-import { prisma } from "./prisma.js"; // Importando a conexão que criamos
+import { prisma } from "./prisma.js";
 
 export class PrismaAlunoRepository implements AlunoRepository {
   async save(aluno: Aluno): Promise<void> {
@@ -9,7 +9,9 @@ export class PrismaAlunoRepository implements AlunoRepository {
         id: aluno.id,
         name: aluno.name,
         email: aluno.email,
-        cpf: aluno.CPF, // No prisma está 'cpf', na sua entidade está 'CPF'
+        cpf: aluno.CPF,
+        weight: aluno.weight,
+        password: aluno.getPassword(),
       },
     });
     console.log(`[Prisma DB] Aluno ${aluno.name} salvo no Postgres`);
@@ -22,6 +24,7 @@ export class PrismaAlunoRepository implements AlunoRepository {
         name: aluno.name,
         email: aluno.email,
         cpf: aluno.CPF,
+        weight: aluno.weight,
       },
     });
     console.log(`[Prisma DB] Aluno ${aluno.id} atualizado no Postgres`);
@@ -36,7 +39,6 @@ export class PrismaAlunoRepository implements AlunoRepository {
         },
       },
     });
-    // Convertendo a lista do Prisma em uma lista de Entidades Aluno
     return alunos.map(
       (a) => new Aluno(a.id, a.name, a.email, a.weight, a.cpf, a.password),
     );

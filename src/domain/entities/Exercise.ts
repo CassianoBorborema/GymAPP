@@ -18,5 +18,8 @@ export class Exercise {
     if (!this.muscleGroup) {
       throw new Error("Grupo Muscular é obrigatório");
     }
+    if (this.videoUrl && !/^https?:\/\//i.test(this.videoUrl)) {
+      throw new Error("URL do vídeo deve começar com http:// ou https://");
+    }
   }
 }

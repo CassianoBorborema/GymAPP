@@ -17,16 +17,17 @@ model Aluno {
   name      String
   email     String    @unique
   cpf       String    @unique
-  weight    Float    
-  password  String   
+  weight    Float
+  password  String
   createdAt DateTime  @default(now())
   workouts  Workout[]
 }
 
 model Instructor {
   id        String    @id @default(uuid())
-  name      String  
+  name      String
   email     String    @unique
+  password  String
   createdAt DateTime  @default(now())
   workouts  Workout[]
 }
@@ -34,6 +35,7 @@ model Instructor {
 model Exercise {
   id          String        @id @default(uuid())
   name        String
+  videoUrl    String?
   description String?
   items       WorkoutItem[]
 }
@@ -45,18 +47,18 @@ model Workout {
   instructorId String
   createdAt    DateTime      @default(now())
 
-  aluno        Aluno         @relation(fields: [alunoId], references: [id])
-  instructor   Instructor    @relation(fields: [instructorId], references: [id])
-  items        WorkoutItem[]
+  aluno      Aluno      @relation(fields: [alunoId], references: [id])
+  instructor Instructor @relation(fields: [instructorId], references: [id])
+  items      WorkoutItem[]
 }
 
 model WorkoutItem {
-  id         String   @id @default(uuid())
+  id         String @id @default(uuid())
   workoutId  String
   exerciseId String
   sets       Int
   reps       Int
 
-  workout    Workout  @relation(fields: [workoutId], references: [id])
-  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+  workout  Workout  @relation(fields: [workoutId], references: [id])
+  exercise Exercise @relation(fields: [exerciseId], references: [id])
 }

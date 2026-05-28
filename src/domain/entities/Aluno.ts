@@ -13,6 +13,10 @@ export class Aluno {
     this.validate();
   }
 
+  getPassword(): string {
+    return this.password;
+  }
+
   setPassword(password: string): void {
     this.password = password;
     this.validate();
