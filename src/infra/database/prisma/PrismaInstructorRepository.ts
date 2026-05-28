@@ -21,6 +21,7 @@ export class PrismaInstructorRepository implements InstructorRepository {
         name: instructor.name,
         email: instructor.email,
         password: instructor.getPassword(),
+        createdAt: new Date(),
       },
     });
   }
