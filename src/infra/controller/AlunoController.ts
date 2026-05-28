@@ -4,11 +4,13 @@ import { CreateAluno } from "../../app/usecases/CreateAluno.js";
 import { GetAluno } from "../../app/usecases/GetAluno.js";
 import { UpdateAluno } from "../../app/usecases/UpdateAluno.js";
 import { SearchAluno } from "../../app/usecases/SearchAluno.js";
-import { InMemoryAlunoRepository } from "../database/InMemory/InMemoryAlunoRepository.js";
+import type { AlunoRepository } from "../../domain/repositories/AlunoRepository.js";
 
-export async function alunoRoutes(app: FastifyInstance) {
-  // Instanciamos o que o Aluno precisa aqui dentro
-  const alunoRepository = new InMemoryAlunoRepository();
+export async function alunoRoutes(
+  app: FastifyInstance,
+  opts: { alunoRepository: AlunoRepository },
+) {
+  const { alunoRepository } = opts;
   const createAluno = new CreateAluno(alunoRepository);
   const getAluno = new GetAluno(alunoRepository);
   const updateAluno = new UpdateAluno(alunoRepository);

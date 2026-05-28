@@ -3,10 +3,13 @@ import { CreateExercise } from "../../app/usecases/CreateExercise.js";
 import { UpdateExercise } from "../../app/usecases/UpdateExercise.js";
 import { GetExercise } from "../../app/usecases/GetExercise.js";
 import { SearchExercise } from "../../app/usecases/SearchExercise.js";
-import { InMemoryExerciseRepository } from "../database/InMemory/InMemoryExerciseRepository.js";
+import type { ExerciseRepository } from "../../domain/repositories/ExerciseRepository.js";
 
-export async function exerciseRoutes(app: FastifyInstance) {
-  const exerciseRepository = new InMemoryExerciseRepository();
+export async function exerciseRoutes(
+  app: FastifyInstance,
+  opts: { exerciseRepository: ExerciseRepository },
+) {
+  const { exerciseRepository } = opts;
 
   const createExercise = new CreateExercise(exerciseRepository);
   const updateExercise = new UpdateExercise(exerciseRepository);

@@ -2,10 +2,13 @@ import type { FastifyInstance } from "fastify";
 import { CreateInstructor } from "../../app/usecases/CreateInstructor.js";
 import { GetInstructor } from "../../app/usecases/GetInstructor.js";
 import { UpdateInstructor } from "../../app/usecases/UpdateInstructor.js";
-import { InMemoryInstructorRepository } from "../database/InMemory/InMemoryInstructorRepository.js";
+import type { InstructorRepository } from "../../domain/repositories/InstructorRepository.js";
 
-export async function instructorRoutes(app: FastifyInstance) {
-  const instructorRepository = new InMemoryInstructorRepository();
+export async function instructorRoutes(
+  app: FastifyInstance,
+  opts: { instructorRepository: InstructorRepository },
+) {
+  const { instructorRepository } = opts;
   const createInstructor = new CreateInstructor(instructorRepository);
   const getInstructor = new GetInstructor(instructorRepository);
   const updateInstructor = new UpdateInstructor(instructorRepository);
