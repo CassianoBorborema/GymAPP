@@ -2,6 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { CreateInstructor } from "../../app/usecases/CreateInstructor.js";
 import { GetInstructor } from "../../app/usecases/GetInstructor.js";
 import { UpdateInstructor } from "../../app/usecases/UpdateInstructor.js";
+import { DeleteInstructor } from "../../app/usecases/DeleteInstructor.js";
 import type { InstructorRepository } from "../../domain/repositories/InstructorRepository.js";
 
 export async function instructorRoutes(
@@ -12,6 +13,7 @@ export async function instructorRoutes(
   const createInstructor = new CreateInstructor(instructorRepository);
   const getInstructor = new GetInstructor(instructorRepository);
   const updateInstructor = new UpdateInstructor(instructorRepository);
+  const deleteInstructor = new DeleteInstructor(instructorRepository);
 
   app.post("/instructors", async (request, reply) => {
     try {
@@ -39,6 +41,16 @@ export async function instructorRoutes(
       const body = request.body as any;
       const updated = await updateInstructor.execute({ id, ...body });
       return reply.send(updated);
+    } catch (error: any) {
+      return reply.code(400).send({ error: error.message });
+    }
+  });
+
+  app.delete("/instructors/:id", async (request, reply) => {
+    try {
+      const { id } = request.params as { id: string };
+      await deleteInstructor.execute({ id });
+      return reply.code(204).send();
     } catch (error: any) {
       return reply.code(400).send({ error: error.message });
     }

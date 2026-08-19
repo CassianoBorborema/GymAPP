@@ -3,6 +3,7 @@ import { CreateExercise } from "../../app/usecases/CreateExercise.js";
 import { UpdateExercise } from "../../app/usecases/UpdateExercise.js";
 import { GetExercise } from "../../app/usecases/GetExercise.js";
 import { SearchExercise } from "../../app/usecases/SearchExercise.js";
+import { DeleteExercise } from "../../app/usecases/DeleteExercise.js";
 import type { ExerciseRepository } from "../../domain/repositories/ExerciseRepository.js";
 
 export async function exerciseRoutes(
@@ -15,6 +16,7 @@ export async function exerciseRoutes(
   const updateExercise = new UpdateExercise(exerciseRepository);
   const getExercise = new GetExercise(exerciseRepository);
   const searchExercise = new SearchExercise(exerciseRepository);
+  const deleteExercise = new DeleteExercise(exerciseRepository);
 
   app.post("/exercises", async (request, reply) => {
     try {
@@ -52,6 +54,16 @@ export async function exerciseRoutes(
       const body = request.body as any;
       const updated = await updateExercise.execute({ id, ...body });
       return reply.send(updated);
+    } catch (error: any) {
+      return reply.code(400).send({ error: error.message });
+    }
+  });
+
+  app.delete("/exercises/:id", async (request, reply) => {
+    try {
+      const { id } = request.params as { id: string };
+      await deleteExercise.execute({ id });
+      return reply.code(204).send();
     } catch (error: any) {
       return reply.code(400).send({ error: error.message });
     }

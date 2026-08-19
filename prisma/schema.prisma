@@ -35,6 +35,7 @@ model Instructor {
 model Exercise {
   id          String        @id @default(uuid())
   name        String
+  muscleGroup String
   videoUrl    String?
   description String?
   items       WorkoutItem[]
@@ -58,6 +59,8 @@ model WorkoutItem {
   exerciseId String
   sets       Int
   reps       Int
+  restTime   Int?
+  observations String?
 
   workout  Workout  @relation(fields: [workoutId], references: [id])
   exercise Exercise @relation(fields: [exerciseId], references: [id])

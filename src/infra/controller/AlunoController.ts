@@ -1,20 +1,26 @@
 import type { FastifyInstance } from "fastify";
 // Importe seus Use Cases e o Repositório aqui
 import { CreateAluno } from "../../app/usecases/CreateAluno.js";
+import { DeleteAluno } from "../../app/usecases/DeleteAluno.js";
 import { GetAluno } from "../../app/usecases/GetAluno.js";
 import { UpdateAluno } from "../../app/usecases/UpdateAluno.js";
 import { SearchAluno } from "../../app/usecases/SearchAluno.js";
 import type { AlunoRepository } from "../../domain/repositories/AlunoRepository.js";
+import type { WorkoutRepository } from "../../domain/repositories/WorkoutRepository.js";
 
 export async function alunoRoutes(
   app: FastifyInstance,
-  opts: { alunoRepository: AlunoRepository },
+  opts: {
+    alunoRepository: AlunoRepository;
+    workoutRepository: WorkoutRepository;
+  },
 ) {
-  const { alunoRepository } = opts;
+  const { alunoRepository, workoutRepository } = opts;
   const createAluno = new CreateAluno(alunoRepository);
   const getAluno = new GetAluno(alunoRepository);
   const updateAluno = new UpdateAluno(alunoRepository);
   const searchAluno = new SearchAluno(alunoRepository);
+  const deleteAluno = new DeleteAluno(alunoRepository, workoutRepository);
 
   // --- Rota POST ---
   app.post("/alunos", async (request, reply) => {
@@ -56,6 +62,17 @@ export async function alunoRoutes(
       const query = request.query as { cpf?: string; email?: string };
       const alunos = await searchAluno.execute(query);
       return reply.send(alunos);
+    } catch (error: any) {
+      return reply.code(400).send({ error: error.message });
+    }
+  });
+
+  // --- Rota DELETE ---
+  app.delete("/alunos/:id", async (request, reply) => {
+    try {
+      const { id } = request.params as { id: string };
+      await deleteAluno.execute({ id });
+      return reply.code(204).send();
     } catch (error: any) {
       return reply.code(400).send({ error: error.message });
     }

@@ -6,7 +6,7 @@ import type { CadastrarAlunoInput } from "../dto/AlunoDTO.js";
 export class CreateAluno {
   constructor(private alunoRepository: AlunoRepository) {}
 
-  async execute(input: CadastrarAlunoInput): Promise<void> {
+  async execute(input: CadastrarAlunoInput): Promise<Aluno> {
     const emailExistente = await this.alunoRepository.findByEmail(input.email);
 
     if (emailExistente) {
@@ -30,5 +30,7 @@ export class CreateAluno {
     );
 
     await this.alunoRepository.save(novoAluno);
+
+    return novoAluno;
   }
 }

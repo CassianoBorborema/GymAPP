@@ -8,6 +8,7 @@ const DEFAULT_MUSCLE_GROUP: MuscleGroup = "Peito";
 type ExerciseRow = {
   id: string;
   name: string;
+  muscleGroup: string;
   videoUrl: string | null;
   description: string | null;
 };
@@ -16,7 +17,7 @@ function toDomain(row: ExerciseRow): Exercise {
   return new Exercise(
     row.id,
     row.name,
-    DEFAULT_MUSCLE_GROUP,
+    row.muscleGroup as MuscleGroup,
     row.videoUrl ?? undefined,
     row.description ?? undefined,
   );
@@ -28,6 +29,7 @@ export class PrismaExerciseRepository implements ExerciseRepository {
       data: {
         id: exercise.id,
         name: exercise.name,
+        muscleGroup: exercise.muscleGroup,
         videoUrl: exercise.videoUrl ?? null,
         description: exercise.description ?? null,
       },
@@ -39,6 +41,7 @@ export class PrismaExerciseRepository implements ExerciseRepository {
       where: { id: exercise.id },
       data: {
         name: exercise.name,
+        muscleGroup: exercise.muscleGroup,
         videoUrl: exercise.videoUrl ?? null,
         description: exercise.description ?? null,
       },

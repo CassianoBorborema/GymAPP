@@ -6,6 +6,7 @@ import { ListWorkout } from "../../app/usecases/ListWorkout.js";
 import { SearchWorkoutByTitle } from "../../app/usecases/SearchWorkoutByTitle.js";
 import { UpdateWorkout } from "../../app/usecases/UpdateWorkout.js";
 import type { WorkoutRepository } from "../../domain/repositories/WorkoutRepository.js";
+import { toWorkoutOutput } from "../../app/mappers/httpMappers.js";
 
 export async function workoutRoutes(
   app: FastifyInstance,
@@ -23,7 +24,7 @@ export async function workoutRoutes(
     try {
       const body = request.body as any;
       const workout = await createWorkout.execute(body);
-      return reply.code(201).send(workout);
+      return reply.code(201).send(toWorkoutOutput(workout));
     } catch (error: any) {
       return reply.code(400).send({ error: error.message });
     }
@@ -33,7 +34,7 @@ export async function workoutRoutes(
     try {
       const { id } = request.params as { id: string };
       const workout = await getWorkout.execute({ id });
-      return reply.send(workout);
+      return reply.send(workout ? toWorkoutOutput(workout) : null);
     } catch (error: any) {
       return reply.code(404).send({ error: error.message });
     }
@@ -43,11 +44,13 @@ export async function workoutRoutes(
     try {
       const query = request.query as { alunoId?: string; title?: string };
       if (query.title) {
-        const workouts = await searchWorkoutByTitle.execute({ title: query.title });
-        return reply.send(workouts);
+        const workouts = await searchWorkoutByTitle.execute({
+          title: query.title,
+        });
+        return reply.send(workouts.map(toWorkoutOutput));
       } else if (query.alunoId) {
         const workouts = await listWorkout.execute({ alunoId: query.alunoId });
-        return reply.send(workouts);
+        return reply.send(workouts.map(toWorkoutOutput));
       } else {
         return reply.code(400).send({ error: "alunoId or title required" });
       }
@@ -61,7 +64,7 @@ export async function workoutRoutes(
       const { id } = request.params as { id: string };
       const body = request.body as any;
       const updated = await updateWorkout.execute({ id, ...body });
-      return reply.send(updated);
+      return reply.send(toWorkoutOutput(updated));
     } catch (error: any) {
       return reply.code(400).send({ error: error.message });
     }

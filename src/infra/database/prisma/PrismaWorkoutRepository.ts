@@ -14,6 +14,8 @@ type WorkoutWithItems = {
     exerciseId: string;
     sets: number;
     reps: number;
+    restTime?: number | null;
+    observations?: string | null;
   }[];
 };
 
@@ -23,7 +25,8 @@ function toWorkoutItem(row: WorkoutWithItems["items"][number]): WorkoutItem {
     row.exerciseId,
     row.sets,
     row.reps,
-    0,
+    row.restTime ?? 0,
+    row.observations ?? undefined,
   );
 }
 
@@ -46,6 +49,8 @@ function itemsCreateData(workout: Workout) {
     exerciseId: item.exerciseId,
     sets: item.sets,
     reps: item.reps,
+    restTime: item.restTime,
+    observations: item.observations,
   }));
 }
 
