@@ -26,6 +26,7 @@ export class CreateAluno {
       input.weight,
       input.CPF,
       input.password,
+      input.id,
     );
 
     await this.alunoRepository.save(novoAluno);

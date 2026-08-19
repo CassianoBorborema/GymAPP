@@ -3,5 +3,5 @@ dist/
 .env
 *.log
 .vscode/
-
 /src/generated/prisma
+gymapp_next_front.plan.md
