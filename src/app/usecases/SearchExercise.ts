@@ -1,13 +1,13 @@
+import type { Exercise } from "../../domain/entities/Exercise.js";
 import type { ExerciseRepository } from "../../domain/repositories/ExerciseRepository.js";
 import type { SearchExerciseInput } from "../dto/ExerciseDTO.js";
-import { Exercise } from "../../domain/entities/Exercise.js";
 
 export class SearchExercise {
   constructor(private exerciseRepository: ExerciseRepository) {}
 
   async execute(input: SearchExerciseInput): Promise<Exercise[]> {
     if (!input.name && !input.muscleGroup) {
-      throw new Error("Informe nome ou grupo muscular para buscar exercícios.");
+      return this.exerciseRepository.findAll();
     }
 
     if (input.name && input.muscleGroup) {

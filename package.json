@@ -15,7 +15,11 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "run"
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "db:migrate": "prisma migrate dev",
+    "db:generate": "prisma generate",
+    "test": "echo \"no tests yet\""
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",

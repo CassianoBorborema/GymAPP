@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+:root {
+  --rat-red: #e11d2e;
+  --rat-red-dark: #b31222;
+  --ink: #141414;
+  --paper: #f6f4f1;
+  --card: #ffffff;
+}
+
+@theme inline {
+  --color-rat: var(--rat-red);
+  --color-rat-dark: var(--rat-red-dark);
+  --color-ink: var(--ink);
+  --color-paper: var(--paper);
+  --font-sans: var(--font-outfit);
+  --font-display: var(--font-bebas);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-outfit), system-ui, sans-serif;
+}
+
+.display {
+  font-family: var(--font-bebas), Impact, sans-serif;
+  letter-spacing: 0.04em;
+}

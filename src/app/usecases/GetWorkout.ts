@@ -1,6 +1,6 @@
 import type { WorkoutRepository } from "../../domain/repositories/WorkoutRepository.js";
 import type { WorkoutIdInput } from "../dto/WorkoutDTO.js";
-import { Workout } from "../../domain/aggregates/Workout.js";
+import type { Workout } from "../../domain/aggregates/Workout.js";
 
 export class GetWorkout {
   constructor(private workoutRepository: WorkoutRepository) {}

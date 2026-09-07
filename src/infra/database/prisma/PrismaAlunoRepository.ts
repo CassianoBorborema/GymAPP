@@ -62,6 +62,13 @@ export class PrismaAlunoRepository implements AlunoRepository {
     return new Aluno(a.id, a.name, a.email, a.weight, a.cpf, a.password);
   }
 
+  async findAll(): Promise<Aluno[]> {
+    const alunos = await prisma.aluno.findMany();
+    return alunos.map(
+      (a) => new Aluno(a.id, a.name, a.email, a.weight, a.cpf, a.password),
+    );
+  }
+
   async delete(id: string): Promise<void> {
     await prisma.aluno.delete({ where: { id } });
     console.log(`[Prisma DB] Aluno ${id} removido do Postgres`);

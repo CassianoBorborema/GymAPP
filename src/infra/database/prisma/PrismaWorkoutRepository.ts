@@ -103,6 +103,14 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
     return rows.map(toDomain);
   }
 
+  async findByInstructorId(instructorId: string): Promise<Workout[]> {
+    const rows = await prisma.workout.findMany({
+      where: { instructorId },
+      include: includeItems,
+    });
+    return rows.map(toDomain);
+  }
+
   async findByTitle(title: string): Promise<Workout[]> {
     const rows = await prisma.workout.findMany({
       where: {

@@ -33,6 +33,10 @@ export class InMemoryExerciseRepository implements ExerciseRepository {
     return this.exercises.find((e) => e.id === id) || null;
   }
 
+  async findAll(): Promise<Exercise[]> {
+    return this.exercises;
+  }
+
   async delete(id: string): Promise<void> {
     this.exercises = this.exercises.filter((e) => e.id !== id);
   }

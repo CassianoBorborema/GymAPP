@@ -1,3 +1,4 @@
+import "dotenv/config";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import { alunoRoutes } from "./infra/controller/AlunoController.js";
@@ -9,6 +10,7 @@ import { PrismaAlunoRepository } from "./infra/database/prisma/PrismaAlunoReposi
 import { PrismaExerciseRepository } from "./infra/database/prisma/PrismaExerciseRepository.js";
 import { PrismaWorkoutRepository } from "./infra/database/prisma/PrismaWorkoutRepository.js";
 import { PrismaInstructorRepository } from "./infra/database/prisma/PrismaInstructorRepository.js";
+import { prisma } from "./infra/database/prisma/prisma.js";
 
 const app = Fastify({
   logger: true,
@@ -26,7 +28,17 @@ await app.register(exerciseRoutes, { exerciseRepository });
 await app.register(workoutRoutes, { workoutRepository });
 await app.register(authRoutes, { alunoRepository, instructorRepository });
 
+app.get("/health", async () => ({ status: "ok" }));
 app.get("/", async () => ({ status: "ok" }));
+
+const shutdown = async () => {
+  await app.close();
+  await prisma.$disconnect();
+  process.exit(0);
+};
+
+process.on("SIGINT", shutdown);
+process.on("SIGTERM", shutdown);
 
 await app.listen({ port: 3000, host: "0.0.0.0" });
 console.log("Server running on http://localhost:3000");

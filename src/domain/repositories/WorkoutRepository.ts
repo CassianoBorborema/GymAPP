@@ -9,6 +9,8 @@ export interface WorkoutRepository{
 
     findByAlunoId(alunoId: string):Promise<Workout[]>
 
+    findByInstructorId(instructorId: string): Promise<Workout[]>;
+
     findByTitle(title: string): Promise<Workout[]>;
     
     delete(id: string): Promise<void>;

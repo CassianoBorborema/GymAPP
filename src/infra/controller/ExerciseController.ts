@@ -6,6 +6,7 @@ import { GetExercise } from "../../app/usecases/GetExercise.js";
 import { SearchExercise } from "../../app/usecases/SearchExercise.js";
 import { DeleteExercise } from "../../app/usecases/DeleteExercise.js";
 import type { ExerciseRepository } from "../../domain/repositories/ExerciseRepository.js";
+import { toExerciseOutput } from "../../app/mappers/httpMappers.js";
 
 export async function exerciseRoutes(
   app: FastifyInstance,
@@ -18,15 +19,19 @@ export async function exerciseRoutes(
   const getExercise = new GetExercise(exerciseRepository);
   const searchExercise = new SearchExercise(exerciseRepository);
   const deleteExercise = new DeleteExercise(exerciseRepository);
+
   app.post("/exercises", { preHandler: verifyJWT }, async (request, reply) => {
     try {
-      const body = request.body as any;
       const user = (request as any).user;
       if (!user || user.role !== "instructor") {
         return reply.code(403).send({ error: "Forbidden" });
       }
-      const exercise = await createExercise.execute(body);
-      return reply.code(201).send(exercise);
+      const body = request.body as any;
+      const exercise = await createExercise.execute({
+        ...body,
+        instructorId: user.id,
+      });
+      return reply.code(201).send(toExerciseOutput(exercise));
     } catch (error: any) {
       return reply.code(400).send({ error: error.message });
     }
@@ -36,7 +41,7 @@ export async function exerciseRoutes(
     try {
       const { id } = request.params as { id: string };
       const exercise = await getExercise.execute({ id });
-      return reply.send(exercise);
+      return reply.send(toExerciseOutput(exercise));
     } catch (error: any) {
       return reply.code(404).send({ error: error.message });
     }
@@ -46,7 +51,7 @@ export async function exerciseRoutes(
     try {
       const query = request.query as { name?: string; muscleGroup?: any };
       const exercises = await searchExercise.execute(query);
-      return reply.send(exercises);
+      return reply.send(exercises.map(toExerciseOutput));
     } catch (error: any) {
       return reply.code(400).send({ error: error.message });
     }
@@ -64,7 +69,7 @@ export async function exerciseRoutes(
           return reply.code(403).send({ error: "Forbidden" });
         }
         const updated = await updateExercise.execute({ id, ...body });
-        return reply.send(updated);
+        return reply.send(toExerciseOutput(updated));
       } catch (error: any) {
         return reply.code(400).send({ error: error.message });
       }

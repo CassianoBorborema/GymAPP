@@ -26,6 +26,10 @@ export class InMemoryWorkoutRepository implements WorkoutRepository {
     return this.workouts.filter((w) => w.alunoId === alunoId);
   }
 
+  async findByInstructorId(instructorId: string): Promise<Workout[]> {
+    return this.workouts.filter((w) => w.instructorId === instructorId);
+  }
+
   async delete(id: string): Promise<void> {
     this.workouts = this.workouts.filter((w) => w.id !== id);
     console.log(`[InMemory DB] Treino ${id} removido`);

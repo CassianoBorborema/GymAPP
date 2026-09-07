@@ -12,8 +12,9 @@ export class Login {
   async execute(input: {
     email: string;
     password: string;
-  }): Promise<{ token: string }> {
+  }): Promise<{ token: string; id: string; role: "instructor" | "aluno"; name: string }> {
     const { email, password } = input;
+    const secret = process.env.JWT_SECRET ?? "dev-secret";
 
     const instructor = await this.instructorRepository.findByEmail(email);
     if (instructor) {
@@ -21,10 +22,15 @@ export class Login {
       if (match) {
         const token = jwt.sign(
           { sub: instructor.id, role: "instructor" },
-          process.env.JWT_SECRET ?? "dev-secret",
+          secret,
           { expiresIn: "7d" },
         );
-        return { token };
+        return {
+          token,
+          id: instructor.id,
+          role: "instructor",
+          name: instructor.name,
+        };
       }
     }
 
@@ -34,10 +40,10 @@ export class Login {
       if (match) {
         const token = jwt.sign(
           { sub: aluno.id, role: "aluno" },
-          process.env.JWT_SECRET ?? "dev-secret",
+          secret,
           { expiresIn: "7d" },
         );
-        return { token };
+        return { token, id: aluno.id, role: "aluno", name: aluno.name };
       }
     }
 

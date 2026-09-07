@@ -1,13 +1,13 @@
+import type { Aluno } from "../../domain/entities/Aluno.js";
 import type { AlunoRepository } from "../../domain/repositories/AlunoRepository.js";
 import type { BuscarAlunoInput } from "../dto/AlunoDTO.js";
-import { Aluno } from "../../domain/entities/Aluno.js";
 
 export class SearchAluno {
   constructor(private alunoRepository: AlunoRepository) {}
 
   async execute(input: BuscarAlunoInput): Promise<Aluno[]> {
     if (!input.CPF && !input.email) {
-      throw new Error("Informe CPF ou e-mail para buscar o aluno.");
+      return this.alunoRepository.findAll();
     }
 
     if (input.CPF && input.email) {

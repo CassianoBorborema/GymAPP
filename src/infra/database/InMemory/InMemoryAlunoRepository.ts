@@ -36,6 +36,10 @@ export class InMemoryAlunoRepository implements AlunoRepository {
     return this.alunos.find((a) => a.CPF === CPF) || null;
   }
 
+  async findAll(): Promise<Aluno[]> {
+    return this.alunos;
+  }
+
   async delete(id: string): Promise<void> {
     this.alunos = this.alunos.filter((a) => a.id !== id);
     console.log(`[InMemory DB] Aluno ${id} removido`);

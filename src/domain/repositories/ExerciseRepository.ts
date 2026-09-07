@@ -12,5 +12,7 @@ export interface ExerciseRepository {
 
   findById(id: string): Promise<Exercise | null>;
 
+  findAll(): Promise<Exercise[]>;
+
   delete(id: string): Promise<void>;
 }

@@ -1,6 +1,5 @@
 import type { FastifyInstance } from "fastify";
 import { verifyJWT } from "../middleware/auth.js";
-// Importe seus Use Cases e o Repositório aqui
 import { CreateAluno } from "../../app/usecases/CreateAluno.js";
 import { DeleteAluno } from "../../app/usecases/DeleteAluno.js";
 import { GetAluno } from "../../app/usecases/GetAluno.js";
@@ -8,6 +7,7 @@ import { UpdateAluno } from "../../app/usecases/UpdateAluno.js";
 import { SearchAluno } from "../../app/usecases/SearchAluno.js";
 import type { AlunoRepository } from "../../domain/repositories/AlunoRepository.js";
 import type { WorkoutRepository } from "../../domain/repositories/WorkoutRepository.js";
+import { toAlunoOutput } from "../../app/mappers/httpMappers.js";
 
 export async function alunoRoutes(
   app: FastifyInstance,
@@ -23,29 +23,34 @@ export async function alunoRoutes(
   const searchAluno = new SearchAluno(alunoRepository);
   const deleteAluno = new DeleteAluno(alunoRepository, workoutRepository);
 
-  // --- Rota POST ---
-  app.post("/alunos", async (request, reply) => {
+  app.post("/alunos", { preHandler: verifyJWT }, async (request, reply) => {
     try {
+      const user = (request as any).user;
+      if (!user || user.role !== "instructor") {
+        return reply.code(403).send({ error: "Forbidden" });
+      }
       const body = request.body as any;
       const aluno = await createAluno.execute(body);
-      return reply.code(201).send(aluno);
+      return reply.code(201).send(toAlunoOutput(aluno));
     } catch (error: any) {
       return reply.code(400).send({ error: error.message });
     }
   });
 
-  // --- Rota GET (ID) ---
-  app.get("/alunos/:id", async (request, reply) => {
+  app.get("/alunos/:id", { preHandler: verifyJWT }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
+      const user = (request as any).user;
+      if (!user || (user.id !== id && user.role !== "instructor")) {
+        return reply.code(403).send({ error: "Forbidden" });
+      }
       const aluno = await getAluno.execute({ id });
-      return reply.send(aluno);
+      return reply.send(toAlunoOutput(aluno));
     } catch (error: any) {
       return reply.code(404).send({ error: error.message });
     }
   });
 
-  // --- Rota PATCH ---
   app.patch(
     "/alunos/:id",
     { preHandler: verifyJWT },
@@ -58,25 +63,30 @@ export async function alunoRoutes(
           return reply.code(403).send({ error: "Forbidden" });
         }
         const updated = await updateAluno.execute({ id, ...body });
-        return reply.send(updated);
+        return reply.send(toAlunoOutput(updated));
       } catch (error: any) {
         return reply.code(400).send({ error: error.message });
       }
     },
   );
 
-  // --- Rota GET (Busca) ---
-  app.get("/alunos", async (request, reply) => {
+  app.get("/alunos", { preHandler: verifyJWT }, async (request, reply) => {
     try {
-      const query = request.query as { cpf?: string; email?: string };
-      const alunos = await searchAluno.execute(query);
-      return reply.send(alunos);
+      const user = (request as any).user;
+      if (!user || user.role !== "instructor") {
+        return reply.code(403).send({ error: "Forbidden" });
+      }
+      const query = request.query as { cpf?: string; CPF?: string; email?: string };
+      const alunos = await searchAluno.execute({
+        ...(query.CPF ?? query.cpf ? { CPF: query.CPF ?? query.cpf } : {}),
+        ...(query.email ? { email: query.email } : {}),
+      });
+      return reply.send(alunos.map(toAlunoOutput));
     } catch (error: any) {
       return reply.code(400).send({ error: error.message });
     }
   });
 
-  // --- Rota DELETE ---
   app.delete(
     "/alunos/:id",
     { preHandler: verifyJWT },
@@ -84,7 +94,7 @@ export async function alunoRoutes(
       try {
         const { id } = request.params as { id: string };
         const user = (request as any).user;
-        if (!user || (user.id !== id && user.role !== "instructor")) {
+        if (!user || user.role !== "instructor") {
           return reply.code(403).send({ error: "Forbidden" });
         }
         await deleteAluno.execute({ id });

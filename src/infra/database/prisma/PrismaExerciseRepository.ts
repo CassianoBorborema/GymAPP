@@ -3,8 +3,6 @@ import type { ExerciseRepository } from "../../../domain/repositories/ExerciseRe
 import type { MuscleGroup } from "../../../domain/entities/Exercise.js";
 import { prisma } from "./prisma.js";
 
-const DEFAULT_MUSCLE_GROUP: MuscleGroup = "Peito";
-
 type ExerciseRow = {
   id: string;
   name: string;
@@ -56,8 +54,15 @@ export class PrismaExerciseRepository implements ExerciseRepository {
   }
 
   async findByMuscleGroup(muscleGroup: MuscleGroup): Promise<Exercise[]> {
-    const all = await this.findByName("");
-    return all.filter((e) => e.muscleGroup === muscleGroup);
+    const exercises = await prisma.exercise.findMany({
+      where: { muscleGroup },
+    });
+    return exercises.map(toDomain);
+  }
+
+  async findAll(): Promise<Exercise[]> {
+    const exercises = await prisma.exercise.findMany();
+    return exercises.map(toDomain);
   }
 
   async findById(id: string): Promise<Exercise | null> {
