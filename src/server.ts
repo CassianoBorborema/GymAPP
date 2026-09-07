@@ -26,5 +26,7 @@ await app.register(exerciseRoutes, { exerciseRepository });
 await app.register(workoutRoutes, { workoutRepository });
 await app.register(authRoutes, { alunoRepository, instructorRepository });
 
+app.get("/", async () => ({ status: "ok" }));
+
 await app.listen({ port: 3000, host: "0.0.0.0" });
 console.log("Server running on http://localhost:3000");

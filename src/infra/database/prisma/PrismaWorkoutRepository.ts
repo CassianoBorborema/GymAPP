@@ -51,7 +51,7 @@ function itemsCreateData(workout: Workout) {
     reps: item.reps,
     restTime: item.restTime,
     observations: item.observations,
-  }));
+  })) as any;
 }
 
 export class PrismaWorkoutRepository implements WorkoutRepository {

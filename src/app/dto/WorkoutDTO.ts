@@ -5,8 +5,8 @@ export interface CreateWorkoutInput {
   items: {
     exerciseId: string;
     sets: number;
-    reps: number; 
-    restTime: number; 
+    reps: number;
+    restTime: number;
     observations?: string;
   }[];
 }
@@ -29,12 +29,30 @@ export interface UpdateWorkoutInput {
   items?: {
     exerciseId: string;
     sets: number;
-    reps: number; 
-    restTime: number; 
+    reps: number;
+    restTime: number;
     observations?: string;
   }[];
 }
 
 export interface WorkoutIdInput {
   id: string;
+}
+
+export interface WorkoutItemOutput {
+  id: string;
+  exerciseId: string;
+  sets: number;
+  reps: number;
+  restTime: number | undefined;
+  observations: string | undefined;
+}
+
+export interface WorkoutOutput {
+  id: string;
+  title: string;
+  alunoId: string;
+  instructorId: string;
+  createdAt: string;
+  items: WorkoutItemOutput[];
 }

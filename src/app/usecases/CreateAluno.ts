@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import bcrypt from "bcryptjs";
 import { Aluno } from "../../domain/entities/Aluno.js";
 import type { AlunoRepository } from "../../domain/repositories/AlunoRepository.js";
 import type { CadastrarAlunoInput } from "../dto/AlunoDTO.js";
@@ -19,14 +20,15 @@ export class CreateAluno {
       throw new Error("Este CPF já está cadastrado.");
     }
 
+    const hashed = await bcrypt.hash(input.password, 10);
+
     const novoAluno = new Aluno(
       crypto.randomUUID(),
       input.name,
       input.email,
       input.weight,
       input.CPF,
-      input.password,
-      input.id,
+      hashed,
     );
 
     await this.alunoRepository.save(novoAluno);

@@ -12,7 +12,9 @@ export class UpdateInstructor {
     }
 
     if (input.email && input.email !== instructor.email) {
-      const emailExistente = await this.instructorRepository.findByEmail(input.email);
+      const emailExistente = await this.instructorRepository.findByEmail(
+        input.email,
+      );
       if (emailExistente && emailExistente.id !== instructor.id) {
         throw new Error("Este e-mail já está em uso por outro instrutor.");
       }
@@ -24,7 +26,9 @@ export class UpdateInstructor {
     }
 
     if (input.password) {
-      instructor.setPassword(input.password);
+      const bcrypt = await import("bcryptjs");
+      const hashed = await bcrypt.hash(input.password, 10);
+      instructor.setPassword(hashed);
     }
 
     await this.instructorRepository.update(instructor);

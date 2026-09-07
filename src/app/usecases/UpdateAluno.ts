@@ -12,7 +12,9 @@ export class UpdateAluno {
     }
 
     if (input.email && input.email !== aluno.email) {
-      const emailExistente = await this.alunoRepository.findByEmail(input.email);
+      const emailExistente = await this.alunoRepository.findByEmail(
+        input.email,
+      );
       if (emailExistente && emailExistente.id !== aluno.id) {
         throw new Error("Este e-mail já está em uso por outro aluno.");
       }
@@ -28,7 +30,9 @@ export class UpdateAluno {
     }
 
     if (input.password) {
-      aluno.setPassword(input.password);
+      const bcrypt = await import("bcryptjs");
+      const hashed = await bcrypt.hash(input.password, 10);
+      aluno.setPassword(hashed);
     }
 
     await this.alunoRepository.update(aluno);

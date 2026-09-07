@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import { verifyJWT } from "../middleware/auth.js";
 import { CreateWorkout } from "../../app/usecases/CreateWorkout.js";
 import { DeleteWorkout } from "../../app/usecases/DeleteWorkout.js";
 import { GetWorkout } from "../../app/usecases/GetWorkout.js";
@@ -59,24 +60,32 @@ export async function workoutRoutes(
     }
   });
 
-  app.patch("/workouts/:id", async (request, reply) => {
-    try {
-      const { id } = request.params as { id: string };
-      const body = request.body as any;
-      const updated = await updateWorkout.execute({ id, ...body });
-      return reply.send(toWorkoutOutput(updated));
-    } catch (error: any) {
-      return reply.code(400).send({ error: error.message });
-    }
-  });
+  app.patch(
+    "/workouts/:id",
+    { preHandler: verifyJWT },
+    async (request, reply) => {
+      try {
+        const { id } = request.params as { id: string };
+        const body = request.body as any;
+        const updated = await updateWorkout.execute({ id, ...body });
+        return reply.send(toWorkoutOutput(updated));
+      } catch (error: any) {
+        return reply.code(400).send({ error: error.message });
+      }
+    },
+  );
 
-  app.delete("/workouts/:id", async (request, reply) => {
-    try {
-      const { id } = request.params as { id: string };
-      await deleteWorkout.execute({ id });
-      return reply.code(204).send();
-    } catch (error: any) {
-      return reply.code(400).send({ error: error.message });
-    }
-  });
+  app.delete(
+    "/workouts/:id",
+    { preHandler: verifyJWT },
+    async (request, reply) => {
+      try {
+        const { id } = request.params as { id: string };
+        await deleteWorkout.execute({ id });
+        return reply.code(204).send();
+      } catch (error: any) {
+        return reply.code(400).send({ error: error.message });
+      }
+    },
+  );
 }

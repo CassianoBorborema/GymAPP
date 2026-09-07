@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import { verifyJWT } from "../middleware/auth.js";
 import { CreateInstructor } from "../../app/usecases/CreateInstructor.js";
 import { GetInstructor } from "../../app/usecases/GetInstructor.js";
 import { UpdateInstructor } from "../../app/usecases/UpdateInstructor.js";
@@ -35,24 +36,32 @@ export async function instructorRoutes(
     }
   });
 
-  app.patch("/instructors/:id", async (request, reply) => {
-    try {
-      const { id } = request.params as { id: string };
-      const body = request.body as any;
-      const updated = await updateInstructor.execute({ id, ...body });
-      return reply.send(updated);
-    } catch (error: any) {
-      return reply.code(400).send({ error: error.message });
-    }
-  });
+  app.patch(
+    "/instructors/:id",
+    { preHandler: verifyJWT },
+    async (request, reply) => {
+      try {
+        const { id } = request.params as { id: string };
+        const body = request.body as any;
+        const updated = await updateInstructor.execute({ id, ...body });
+        return reply.send(updated);
+      } catch (error: any) {
+        return reply.code(400).send({ error: error.message });
+      }
+    },
+  );
 
-  app.delete("/instructors/:id", async (request, reply) => {
-    try {
-      const { id } = request.params as { id: string };
-      await deleteInstructor.execute({ id });
-      return reply.code(204).send();
-    } catch (error: any) {
-      return reply.code(400).send({ error: error.message });
-    }
-  });
+  app.delete(
+    "/instructors/:id",
+    { preHandler: verifyJWT },
+    async (request, reply) => {
+      try {
+        const { id } = request.params as { id: string };
+        await deleteInstructor.execute({ id });
+        return reply.code(204).send();
+      } catch (error: any) {
+        return reply.code(400).send({ error: error.message });
+      }
+    },
+  );
 }

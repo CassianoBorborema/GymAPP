@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import { verifyJWT } from "../middleware/auth.js";
 import { CreateExercise } from "../../app/usecases/CreateExercise.js";
 import { UpdateExercise } from "../../app/usecases/UpdateExercise.js";
 import { GetExercise } from "../../app/usecases/GetExercise.js";
@@ -17,10 +18,13 @@ export async function exerciseRoutes(
   const getExercise = new GetExercise(exerciseRepository);
   const searchExercise = new SearchExercise(exerciseRepository);
   const deleteExercise = new DeleteExercise(exerciseRepository);
-
-  app.post("/exercises", async (request, reply) => {
+  app.post("/exercises", { preHandler: verifyJWT }, async (request, reply) => {
     try {
       const body = request.body as any;
+      const user = (request as any).user;
+      if (!user || user.role !== "instructor") {
+        return reply.code(403).send({ error: "Forbidden" });
+      }
       const exercise = await createExercise.execute(body);
       return reply.code(201).send(exercise);
     } catch (error: any) {
@@ -48,24 +52,40 @@ export async function exerciseRoutes(
     }
   });
 
-  app.patch("/exercises/:id", async (request, reply) => {
-    try {
-      const { id } = request.params as { id: string };
-      const body = request.body as any;
-      const updated = await updateExercise.execute({ id, ...body });
-      return reply.send(updated);
-    } catch (error: any) {
-      return reply.code(400).send({ error: error.message });
-    }
-  });
+  app.patch(
+    "/exercises/:id",
+    { preHandler: verifyJWT },
+    async (request, reply) => {
+      try {
+        const { id } = request.params as { id: string };
+        const body = request.body as any;
+        const user = (request as any).user;
+        if (!user || user.role !== "instructor") {
+          return reply.code(403).send({ error: "Forbidden" });
+        }
+        const updated = await updateExercise.execute({ id, ...body });
+        return reply.send(updated);
+      } catch (error: any) {
+        return reply.code(400).send({ error: error.message });
+      }
+    },
+  );
 
-  app.delete("/exercises/:id", async (request, reply) => {
-    try {
-      const { id } = request.params as { id: string };
-      await deleteExercise.execute({ id });
-      return reply.code(204).send();
-    } catch (error: any) {
-      return reply.code(400).send({ error: error.message });
-    }
-  });
+  app.delete(
+    "/exercises/:id",
+    { preHandler: verifyJWT },
+    async (request, reply) => {
+      try {
+        const { id } = request.params as { id: string };
+        const user = (request as any).user;
+        if (!user || user.role !== "instructor") {
+          return reply.code(403).send({ error: "Forbidden" });
+        }
+        await deleteExercise.execute({ id });
+        return reply.code(204).send();
+      } catch (error: any) {
+        return reply.code(400).send({ error: error.message });
+      }
+    },
+  );
 }

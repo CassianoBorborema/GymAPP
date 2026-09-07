@@ -17,7 +17,7 @@ export interface ExerciseIdInput {
   id: string;
 }
 
-export interface UpdateExerciseInput{
+export interface UpdateExerciseInput {
   id: string;
   name?: string;
   muscleGroup?: MuscleGroup;
@@ -28,4 +28,12 @@ export interface UpdateExerciseInput{
 
 export interface DeleteExerciseInput {
   id: string;
+}
+
+export interface ExerciseOutput {
+  id: string;
+  name: string;
+  muscleGroup: MuscleGroup;
+  videoUrl: string | undefined;
+  description: string | undefined;
 }

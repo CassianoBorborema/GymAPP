@@ -13,12 +13,10 @@ export interface UpdateInstructorInput {
   name?: string;
   email?: string;
   password?: string;
-} 
+}
 
-
-export interface InstructorOutputDTO {
+export interface InstructorOutput {
   id: string;
   name: string;
   email: string;
 }
-
