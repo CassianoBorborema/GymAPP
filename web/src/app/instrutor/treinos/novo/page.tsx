@@ -20,6 +20,7 @@ export default function NewWorkoutPage() {
   const [alunos, setAlunos] = useState<Aluno[]>([]);
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [title, setTitle] = useState("Treino A");
+  const [description, setDescription] = useState("");
   const [alunoId, setAlunoId] = useState("");
   const [items, setItems] = useState<DraftItem[]>([
     { exerciseId: "", sets: "3", reps: "12", restTime: "60" },
@@ -33,7 +34,11 @@ export default function NewWorkoutPage() {
       setExercises(e);
       if (a[0]) setAlunoId(a[0].id);
       if (e[0]) {
-        setItems((prev) => prev.map((item, i) => (i === 0 ? { ...item, exerciseId: e[0]!.id } : item)));
+        setItems((prev) =>
+          prev.map((item, i) =>
+            i === 0 ? { ...item, exerciseId: e[0]!.id } : item,
+          ),
+        );
       }
     })();
   }, []);
@@ -56,12 +61,13 @@ export default function NewWorkoutPage() {
     try {
       await api.createWorkout({
         title,
+        description: description || undefined,
         alunoId,
         items: items.map((item) => ({
           exerciseId: item.exerciseId,
           sets: Number(item.sets),
           reps: Number(item.reps),
-          restTime: Number(item.restTime),
+          restTime: item.restTime,
         })),
       });
       router.replace("/instrutor/treinos");
@@ -76,10 +82,29 @@ export default function NewWorkoutPage() {
         <h1 className="display text-5xl">Novo treino</h1>
         <form onSubmit={onSubmit} className="mt-6 grid max-w-3xl gap-4">
           <Field label="Título">
-            <input className={inputClassName()} required minLength={3} value={title} onChange={(e) => setTitle(e.target.value)} />
+            <input
+              className={inputClassName()}
+              required
+              minLength={3}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </Field>
+          <Field label="Descrição (opcional)">
+            <textarea
+              className={inputClassName()}
+              rows={3}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
           </Field>
           <Field label="Aluno">
-            <select className={inputClassName()} required value={alunoId} onChange={(e) => setAlunoId(e.target.value)}>
+            <select
+              className={inputClassName()}
+              required
+              value={alunoId}
+              onChange={(e) => setAlunoId(e.target.value)}
+            >
               {alunos.map((a) => (
                 <option key={a.id} value={a.id}>
                   {a.name}
@@ -91,7 +116,10 @@ export default function NewWorkoutPage() {
           <div className="grid gap-3">
             <p className="font-semibold">Exercícios</p>
             {items.map((item, index) => (
-              <div key={index} className="grid gap-2 rounded-2xl bg-white p-4 sm:grid-cols-4">
+              <div
+                key={index}
+                className="grid gap-2 rounded-2xl bg-white p-4 sm:grid-cols-4"
+              >
                 <select
                   className={inputClassName()}
                   value={item.exerciseId}
@@ -107,24 +135,48 @@ export default function NewWorkoutPage() {
                     </option>
                   ))}
                 </select>
-                <input className={inputClassName()} type="number" min={1} value={item.sets} onChange={(e) => {
-                  const next = [...items];
-                  next[index] = { ...item, sets: e.target.value };
-                  setItems(next);
-                }} placeholder="Séries" />
-                <input className={inputClassName()} type="number" min={1} value={item.reps} onChange={(e) => {
-                  const next = [...items];
-                  next[index] = { ...item, reps: e.target.value };
-                  setItems(next);
-                }} placeholder="Reps" />
-                <input className={inputClassName()} type="number" min={0} value={item.restTime} onChange={(e) => {
-                  const next = [...items];
-                  next[index] = { ...item, restTime: e.target.value };
-                  setItems(next);
-                }} placeholder="Descanso (s)" />
+                <input
+                  className={inputClassName()}
+                  type="number"
+                  min={1}
+                  value={item.sets}
+                  onChange={(e) => {
+                    const next = [...items];
+                    next[index] = { ...item, sets: e.target.value };
+                    setItems(next);
+                  }}
+                  placeholder="Séries"
+                />
+                <input
+                  className={inputClassName()}
+                  type="number"
+                  min={1}
+                  value={item.reps}
+                  onChange={(e) => {
+                    const next = [...items];
+                    next[index] = { ...item, reps: e.target.value };
+                    setItems(next);
+                  }}
+                  placeholder="Reps"
+                />
+                <input
+                  className={inputClassName()}
+                  type="text"
+                  value={item.restTime}
+                  onChange={(e) => {
+                    const next = [...items];
+                    next[index] = { ...item, restTime: e.target.value };
+                    setItems(next);
+                  }}
+                  placeholder="Descanso (s)"
+                />
               </div>
             ))}
-            <button type="button" className="justify-self-start text-sm font-semibold text-rat" onClick={addItem}>
+            <button
+              type="button"
+              className="justify-self-start text-sm font-semibold text-rat"
+              onClick={addItem}
+            >
               + exercício
             </button>
           </div>

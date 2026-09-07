@@ -6,6 +6,7 @@ import { prisma } from "./prisma.js";
 type WorkoutWithItems = {
   id: string;
   title: string;
+  description: string | null;
   alunoId: string;
   instructorId: string;
   createdAt: Date;
@@ -14,7 +15,7 @@ type WorkoutWithItems = {
     exerciseId: string;
     sets: number;
     reps: number;
-    restTime?: number | null;
+    restTime?: string | null;
     observations?: string | null;
   }[];
 };
@@ -25,7 +26,7 @@ function toWorkoutItem(row: WorkoutWithItems["items"][number]): WorkoutItem {
     row.exerciseId,
     row.sets,
     row.reps,
-    row.restTime ?? 0,
+    row.restTime ?? "",
     row.observations ?? undefined,
   );
 }
@@ -36,6 +37,7 @@ function toDomain(row: WorkoutWithItems): Workout {
     row.alunoId,
     row.instructorId,
     row.title,
+    row.description ?? undefined,
     row.items.map(toWorkoutItem),
     row.createdAt,
   );
@@ -60,6 +62,9 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
       data: {
         id: workout.id,
         title: workout.title,
+        ...(workout.description === undefined
+          ? {}
+          : { description: workout.description }),
         alunoId: workout.alunoId,
         instructorId: workout.instructorId,
         createdAt: workout.createdAt,
@@ -77,6 +82,9 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
         where: { id: workout.id },
         data: {
           title: workout.title,
+          ...(workout.description === undefined
+            ? {}
+            : { description: workout.description }),
           alunoId: workout.alunoId,
           instructorId: workout.instructorId,
           items: {

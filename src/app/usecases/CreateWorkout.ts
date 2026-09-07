@@ -13,7 +13,7 @@ export class CreateWorkout {
     }
 
     const items = input.items.map(
-      (item: typeof input.items[0]) =>
+      (item: (typeof input.items)[0]) =>
         new WorkoutItem(
           crypto.randomUUID(),
           item.exerciseId,
@@ -29,6 +29,7 @@ export class CreateWorkout {
       input.alunoId,
       input.instructorId,
       input.title,
+      input.description,
       items,
     );
 

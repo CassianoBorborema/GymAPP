@@ -1,12 +1,13 @@
 export interface CreateWorkoutInput {
   title: string;
+  description?: string;
   alunoId: string;
   instructorId: string;
   items: {
     exerciseId: string;
     sets: number;
     reps: number;
-    restTime: number;
+    restTime: string;
     observations?: string;
   }[];
 }
@@ -26,11 +27,12 @@ export interface DeleteWorkoutInput {
 export interface UpdateWorkoutInput {
   id: string;
   title?: string;
+  description?: string;
   items?: {
     exerciseId: string;
     sets: number;
     reps: number;
-    restTime: number;
+    restTime: string;
     observations?: string;
   }[];
 }
@@ -44,13 +46,14 @@ export interface WorkoutItemOutput {
   exerciseId: string;
   sets: number;
   reps: number;
-  restTime: number | undefined;
+  restTime: string | undefined;
   observations: string | undefined;
 }
 
 export interface WorkoutOutput {
   id: string;
   title: string;
+  description: string | undefined;
   alunoId: string;
   instructorId: string;
   createdAt: string;

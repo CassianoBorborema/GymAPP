@@ -36,13 +36,14 @@ export type WorkoutItem = {
   exerciseId: string;
   sets: number;
   reps: number;
-  restTime?: number;
+  restTime?: string;
   observations?: string;
 };
 
 export type Workout = {
   id: string;
   title: string;
+  description?: string;
   alunoId: string;
   instructorId: string;
   createdAt: string;

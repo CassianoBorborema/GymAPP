@@ -44,6 +44,7 @@ model Exercise {
 model Workout {
   id           String        @id @default(uuid())
   title        String
+  description  String?
   alunoId      String
   instructorId String
   createdAt    DateTime      @default(now())
@@ -59,7 +60,7 @@ model WorkoutItem {
   exerciseId String
   sets       Int
   reps       Int
-  restTime   Int?
+  restTime   String?
   observations String?
 
   workout  Workout  @relation(fields: [workoutId], references: [id])

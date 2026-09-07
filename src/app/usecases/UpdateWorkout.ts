@@ -17,6 +17,10 @@ export class UpdateWorkout {
       treino.setTitle(input.title);
     }
 
+    if (input.description !== undefined) {
+      treino.setDescription(input.description || undefined);
+    }
+
     if (input.items) {
       if (input.items.length === 0) {
         throw new Error("O treino deve ter pelo menos um exercício.");

@@ -1,11 +1,5 @@
 import { getSession } from "./auth";
-import type {
-  Aluno,
-  Exercise,
-  Instructor,
-  Session,
-  Workout,
-} from "./types";
+import type { Aluno, Exercise, Instructor, Session, Workout } from "./types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
 
@@ -98,12 +92,13 @@ export const api = {
   getWorkout: (id: string) => request<Workout>(`/workouts/${id}`),
   createWorkout: (body: {
     title: string;
+    description?: string;
     alunoId: string;
     items: {
       exerciseId: string;
       sets: number;
       reps: number;
-      restTime: number;
+      restTime: string;
       observations?: string;
     }[];
   }) =>

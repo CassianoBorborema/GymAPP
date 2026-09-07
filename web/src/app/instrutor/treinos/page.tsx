@@ -26,9 +26,12 @@ export default function WorkoutsPage() {
     void load();
   }, []);
 
-  function alunoName(id: string) {
-    return alunos.find((a) => a.id === id)?.name ?? id.slice(0, 8);
-  }
+  const groupedWorkouts = alunos
+    .map((aluno) => ({
+      aluno,
+      workouts: workouts.filter((workout) => workout.alunoId === aluno.id),
+    }))
+    .filter((group) => group.workouts.length > 0);
 
   async function remove(id: string) {
     if (!confirm("Apagar este treino?")) return;
@@ -42,7 +45,9 @@ export default function WorkoutsPage() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h1 className="display text-5xl">Treinos</h1>
-            <p className="mt-1 text-black/55">Rotina personalizada por aluno.</p>
+            <p className="mt-1 text-black/55">
+              Rotina personalizada por aluno.
+            </p>
           </div>
           <Link
             href="/instrutor/treinos/novo"
@@ -54,18 +59,44 @@ export default function WorkoutsPage() {
         {error && <p className="mt-3 text-sm text-rat">{error}</p>}
 
         <div className="mt-8 grid gap-3">
-          {workouts.map((w) => (
-            <article key={w.id} className="flex items-center justify-between rounded-2xl bg-white p-4 shadow-sm">
-              <div>
-                <p className="font-bold">{w.title}</p>
-                <p className="text-sm text-black/55">
-                  {alunoName(w.alunoId)} · {w.items.length} exercício(s)
-                </p>
+          {groupedWorkouts.map(({ aluno, workouts: alunoWorkouts }) => (
+            <details
+              key={aluno.id}
+              className="rounded-2xl bg-white p-4 shadow-sm"
+              open
+            >
+              <summary className="cursor-pointer font-bold">
+                {aluno.name}{" "}
+                <span className="font-normal text-black/55">
+                  ({aluno.email})
+                </span>
+              </summary>
+              <div className="mt-3 grid gap-2 border-t border-black/8 pt-3">
+                {alunoWorkouts.map((w) => (
+                  <article
+                    key={w.id}
+                    className="flex items-center justify-between gap-4 rounded-xl bg-black/3 p-3"
+                  >
+                    <div>
+                      <p className="font-bold">{w.title}</p>
+                      {w.description && (
+                        <p className="text-sm text-black/55">{w.description}</p>
+                      )}
+                      <p className="text-sm text-black/55">
+                        {w.items.length} exercício(s)
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      className="text-sm text-rat"
+                      onClick={() => remove(w.id)}
+                    >
+                      Remover
+                    </button>
+                  </article>
+                ))}
               </div>
-              <button type="button" className="text-sm text-rat" onClick={() => remove(w.id)}>
-                Remover
-              </button>
-            </article>
+            </details>
           ))}
           {workouts.length === 0 && (
             <p className="rounded-2xl bg-white p-8 text-center text-black/45">

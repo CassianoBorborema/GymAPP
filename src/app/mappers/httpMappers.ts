@@ -53,6 +53,7 @@ export function toWorkoutOutput(workout: Workout): WorkoutOutput {
     title: workout.title,
     alunoId: workout.alunoId,
     instructorId: workout.instructorId,
+    description: workout.description,
     createdAt: workout.createdAt.toISOString(),
     items: workout.getItems().map(toWorkoutItemOutput),
   };
